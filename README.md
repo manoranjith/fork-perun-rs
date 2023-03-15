@@ -245,3 +245,10 @@ ncat 127.0.0.1 2222
     <td>N/A</td>
   </tr>
 </table>
+
+## Copyright
+
+Copyright 2023 - See [NOTICE file](NOTICE) for copyright holders.
+Use of the source code is governed by the Apache 2.0 license that can be found in the [LICENSE file](LICENSE).
+
+Contact us at [info@perun.network](mailto:info@perun.network).
