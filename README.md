@@ -141,3 +141,107 @@ ncat 127.0.0.1 2222
 - `std` (default)
 - `k256` (default) Use [`k256`](https://crates.io/crates/k256) for signatures
 - `secp256k1` Use [`secp256k1`](https://crates.io/crates/secp256k1) for signatures (implies `std`)
+
+## Limitations
+
+<table>
+  <th>
+    <td>rust-perun</td>
+    <td><a href="https://github.com/hyperledger-labs/go-perun">go-perun</a></td>
+    <td><a href="https://github.com/hyperledger-labs/perun-eth-contracts/">perun-eth-contracts</a></td>
+  </th>
+  <tr>
+    <td>API</td>
+    <td>
+        <details><summary>low-level</summary>
+            The application stores a reference to all channels and forwards incoming messages and responses.
+        </details>
+    </td>
+    <td>
+        <details><summary>high-level</summary>
+            The sdk stores channel objects and handles communication implicitly, providing only a few functions to the application.
+        </details>
+    </td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>Can run on embedded devices</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>Remote Funding/Watching possible+required</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>Works with Non-Ethereum blockchains</td>
+    <td>No</td>
+    <td>Yes</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>2+ Assets</td>
+    <td>
+        <details><summary>No</summary>
+            Limited by the data structures used (fixed-size arrays with const generics). Should be relatively easy to fix by using heapless data structures on no_std or normal vectors on std.
+        </details>
+    </td>
+    <td>Yes</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>3+ Participants</td>
+    <td>
+        <details><summary>No</summary>
+            Limited by the data structures used (fixed-size arrays with const generics). Should be relatively easy to fix by using heapless data structures on no_std or normal vectors on std.
+        </details>
+    </td>
+    <td>
+        <details><summary>No</summary>
+            Limited by the network communication code.
+        </details>
+    </td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Communication on embedded device</td>
+    <td>
+        <details><summary>Yes</summary>
+            <ul>
+                <li>Incomming connections: Yes</li>
+                <li>Embedded device to embedded device: Possible but not tested. The cortex-m-demo contains all code to do this, but it currently uses hard-coded wire addresses.</li>
+                <li>Embedded device to watcher/funder: Yes</li>
+                <li>Embedded device to normal go-perun client: Yes</li>
+                <li>Normal go-perun client to embedded device: Yes</li>
+            </ul>
+        </details>
+    </td>
+    <td>No</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>Implicit/Automatic handling of incoming messages</td>
+    <td>
+        <details><summary>No</summary>
+            At the moment, given the low-level interface, the application is responsible for storing channel objects and giving incomming messages to the rust-perun code. We chose to do it this way to avoid requireing an async runtime or blocking the execution until receiving something. At some point this will likely be changed to one of the following, providing a higher-level interface that is easier to use: Additional async functions that handle reply messages; polling system that automatically tries to receive incomming messages, updating the channel state automatically. Both are similar to how go-perun currently does it, though with some adjustments/changes needed due to using Rust and running on bare metal in no_std.
+        </details>
+    </td>
+    <td>Yes</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>Can have multiple channels</td>
+    <td>
+      Library: Yes<br>
+      Demo: No<br>
+      <details><summary>Hardware: Until we run out of memory</summary>
+        The trivial solution of one long-living TCP connection per channel likely won't work due to memory constraints. It is possible to use a single connection for multiple channels (e.g. having another server relaying the messages) or to only use short-lived connections (which won't work during channel proposals/setup). The application can also use a different protocol for communication, but that will require the other participants to use that, too, or a relaying server. Neither of those is implemented in the demo, all of those are possible with the library.
+      </details>
+    </td>
+    <td>Yes</td>
+    <td>N/A</td>
+  </tr>
+</table>
