@@ -12,6 +12,7 @@ git submodule init
 git submodule update
 
 # (Optional) Install tools (if not done already).
+sudo apt-get install libudev-dev # Dependancy
 cargo install cargo-flash
 
 # Execute all tests
@@ -26,8 +27,17 @@ cargo run --example go-integration
 # Run old Example/Walkthrough (can be configured at the top with constants)
 cargo run --example lowlevel_basic_channel
 
+# Install dependancies for compiling for arm architecture + no-std
+rustup target add thumbv7em-none-eabi
+rustup update
+rustup +nightly target install thumbv7em-none-eabihf
+sudo apt-get install gcc-arm-none-eabi
+
 # Compile without std (the example above requires std)
 cargo build --target thumbv7em-none-eabi --no-default-features -F k256
+
+# Setup qemu
+sudo apt-get install qemu-system-arm
 
 # Compile example without std and run in qemu
 # - does not have communication with Go
@@ -62,7 +72,7 @@ ganache -e 100000000000000 -s 1024 -b 5
 cd examples/go-integration; go run . ; cd -
 
 # Compile and Flash to connected device
-cargo flash --chip STM32F439ZITx --target thumbv7em-none-eabihf -p cortex-m-demo --release
+cargo +nightly flash --chip STM32F439ZITx --target thumbv7em-none-eabihf -p cortex-m-demo --release
 ```
 
 #### Debugging
@@ -71,7 +81,8 @@ In addition to ganache and the go-side:
 # Compile with debug information (I couldn't get custom profiles to work with cargo-flash)
 # Release optimizations are required to run (otherwise it needs too much memory)
 # Using this profile additionally adds debug information, though it is not perfect.
-cargo build --target thumbv7em-none-eabihf -p cortex-m-demo --profile=release-with-debug
+cargo +nightly build --target thumbv7em-none-eabihf -p cortex-m-demo --profile=release-with-debug
+<!-- cargo build --target thumbv7em-none-eabihf -p cortex-m-demo --profile=release-with-debug -->
 
 # Start openocd in Terminal 3
 cd cortex-m-demo; openocd ; cd -
