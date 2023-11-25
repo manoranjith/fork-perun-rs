@@ -53,7 +53,7 @@ pub enum WatcherReplyMessage {
 /// Messages sent to the Funder service.
 #[derive(Debug)]
 pub enum FunderRequestMessage {
-    FundingRequest(LedgerChannelFundingRequest),
+    FundReq(LedgerChannelFundingRequest),
 }
 
 /// Messages sent from the Funder service.

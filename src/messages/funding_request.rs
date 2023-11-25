@@ -18,14 +18,14 @@ pub struct LedgerChannelFundingRequest {
     pub state: State,
 }
 
-impl TryFrom<perunwire::FundingRequestMsg> for LedgerChannelFundingRequest {
+impl TryFrom<perunwire::FundReq> for LedgerChannelFundingRequest {
     type Error = ConversionError;
 
-    fn try_from(value: perunwire::FundingRequestMsg) -> Result<Self, Self::Error> {
+    fn try_from(value: perunwire::FundReq) -> Result<Self, Self::Error> {
         Ok(Self {
-            part_idx: value.participant as usize,
+            part_idx: value.idx as usize,
             funding_agreement: value
-                .funding_agreement
+                .agreement
                 .ok_or(ConversionError::ExptectedSome)?
                 .try_into()?,
             params: value
@@ -33,20 +33,21 @@ impl TryFrom<perunwire::FundingRequestMsg> for LedgerChannelFundingRequest {
                 .ok_or(ConversionError::ExptectedSome)?
                 .try_into()?,
             state: value
-                .initial_state
+                .state
                 .ok_or(ConversionError::ExptectedSome)?
                 .try_into()?,
         })
     }
 }
 
-impl From<LedgerChannelFundingRequest> for perunwire::FundingRequestMsg {
+impl From<LedgerChannelFundingRequest> for perunwire::FundReq {
     fn from(value: LedgerChannelFundingRequest) -> Self {
         Self {
-            funding_agreement: Some(value.funding_agreement.into()),
+            session_id: String::from(""),
+            agreement: Some(value.funding_agreement.into()),
             params: Some(value.params.into()),
-            initial_state: Some(value.state.into()),
-            participant: value.part_idx as u32,
+            state: Some(value.state.into()),
+            idx: value.part_idx as u32,
         }
     }
 }
