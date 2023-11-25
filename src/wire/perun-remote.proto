@@ -1,13 +1,14 @@
 syntax = "proto3";
 
 import "wire.proto";
+import "errors.proto";
 
 package perunremote;
 
 message Message {
     oneof msg {
-        FundingRequestMsg funding_request = 1;
-        FundingResponseMsg funding_response = 2;
+        FundReq fund_req = 1;
+        FundResp fund_resp = 2;
         WatchRequestMsg watch_request = 3;
         WatchResponseMsg watch_response = 4;
         ForceCloseRequestMsg force_close_request = 5;
@@ -16,16 +17,16 @@ message Message {
     }
 }
 
-message FundingRequestMsg {
-    uint32 participant = 1;
+message FundReq {
+    string sessionID=1;
     perunwire.Params params = 2;
-    perunwire.State initial_state = 3;
-    perunwire.Balances funding_agreement = 4;
+    perunwire.State state = 3;
+    uint32 idx = 4;
+    perunwire.Balances agreement = 5;
 }
 
-message FundingResponseMsg {
-    bytes channel_id = 1;
-    bool success = 2;
+message FundResp {
+    MsgError error = 1;
 }
 
 message WatchRequestMsg {
