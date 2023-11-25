@@ -59,8 +59,8 @@ fn entry() -> ! {
     loop {}
 }
 
-const DEVICE_IP_ADDRESS: Ipv4Address = Ipv4Address::new(10, 0, 0, 2);
-const SERVER_IP_ADDRESS: Ipv4Address = Ipv4Address::new(10, 0, 0, 1);
+const DEVICE_IP_ADDRESS: Ipv4Address = Ipv4Address::new(192, 168, 1, 126);
+const SERVER_IP_ADDRESS: Ipv4Address = Ipv4Address::new(192, 168, 1, 127);
 const SERVER_CONFIG_PORT: u16 = 1339;
 const SERVER_PARTICIPANT_PORT: u16 = 1337;
 const SERVER_SERVICE_PORT: u16 = 1338;
