@@ -140,8 +140,8 @@ mod net {
         pub fn new() -> Self {
             Self {
                 participant: 0,
-                stream: RefCell::new(TcpStream::connect("127.0.0.1:1337").unwrap()),
-                remote_stream: RefCell::new(TcpStream::connect("127.0.0.1:1338").unwrap()),
+                stream: RefCell::new(TcpStream::connect("127.0.0.1:38843").unwrap()), // alice
+                remote_stream: RefCell::new(TcpStream::connect("127.0.0.1:50002").unwrap()),
             }
         }
 
@@ -180,7 +180,7 @@ mod net {
     impl BytesBus for &Bus {
         fn send_to_watcher(&self, msg: &[u8]) {
             print!("{}->Watcher: {:?}\n", PARTICIPANTS[self.participant], msg);
-            self.remote_stream.borrow_mut().write(msg).unwrap();
+            // self.remote_stream.borrow_mut().write(msg).unwrap();
         }
 
         fn send_to_funder(&self, msg: &[u8]) {

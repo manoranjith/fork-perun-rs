@@ -62,9 +62,9 @@ fn entry() -> ! {
 const DEVICE_IP_ADDRESS: Ipv4Address = Ipv4Address::new(192, 168, 1, 126);
 const SERVER_IP_ADDRESS: Ipv4Address = Ipv4Address::new(192, 168, 1, 127);
 const SERVER_CONFIG_PORT: u16 = 1339;
-const SERVER_PARTICIPANT_PORT: u16 = 1337;
-const SERVER_SERVICE_PORT: u16 = 1338;
-const DEVICE_LISTEN_PORT: u16 = 1234;
+const SERVER_PARTICIPANT_PORT: u16 = 38843;  // Alice p2p port
+const SERVER_SERVICE_PORT: u16 = 50002;      // Remote watcher, funder port
+const DEVICE_LISTEN_PORT: u16 = 32977;
 const CIDR_PREFIX_LEN: u8 = 24;
 const MAC_ADDRESS: EthernetAddress = EthernetAddress([0x00, 0x00, 0xDE, 0xAD, 0xBE, 0xEF]);
 const DEBOUNCE_THRESHHOLD: u64 = 100; // Milliseconds
