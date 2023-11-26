@@ -20,6 +20,16 @@ pub struct LedgerChannelFundingRequest {
 }
 
 #[derive(Debug, Clone, Copy)]
+pub struct RegisterReq {
+    pub adj_req: AdjudicatorReq,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct WithdrawReq {
+    pub adj_req: AdjudicatorReq,
+}
+
+#[derive(Debug, Clone, Copy)]
 pub struct Transaction {
     pub state: State,
     pub sigs: [Signature; PARTICIPANTS],
@@ -64,6 +74,50 @@ impl From<LedgerChannelFundingRequest> for perunwire::FundReq {
             params: Some(value.params.into()),
             state: Some(value.state.into()),
             idx: value.part_idx as u32,
+        }
+    }
+}
+
+impl TryFrom<perunwire::RegisterReq> for RegisterReq {
+    type Error = ConversionError;
+
+    fn try_from(value: perunwire::RegisterReq) -> Result<Self, Self::Error> {
+        Ok(Self {
+            adj_req: value
+                .adj_req
+                .ok_or(ConversionError::ExptectedSome)?
+                .try_into()?,
+        })
+    }
+}
+
+impl From<RegisterReq> for perunwire::RegisterReq {
+    fn from(value: RegisterReq) -> Self {
+        Self {
+            session_id: String::from(""),
+            adj_req: Some(value.adj_req.into()),
+        }
+    }
+}
+
+impl TryFrom<perunwire::WithdrawReq> for WithdrawReq {
+    type Error = ConversionError;
+
+    fn try_from(value: perunwire::WithdrawReq) -> Result<Self, Self::Error> {
+        Ok(Self {
+            adj_req: value
+                .adj_req
+                .ok_or(ConversionError::ExptectedSome)?
+                .try_into()?,
+        })
+    }
+}
+
+impl From<WithdrawReq> for perunwire::WithdrawReq {
+    fn from(value: WithdrawReq) -> Self {
+        Self {
+            session_id: String::from(""),
+            adj_req: Some(value.adj_req.into()),
         }
     }
 }

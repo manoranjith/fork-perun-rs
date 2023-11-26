@@ -3,7 +3,7 @@ mod proposal;
 mod update;
 mod watch_request;
 
-pub use funding_request::LedgerChannelFundingRequest;
+pub use funding_request::{LedgerChannelFundingRequest, RegisterReq, WithdrawReq, AdjudicatorReq, Transaction};
 pub use proposal::{LedgerChannelProposal, LedgerChannelProposalAcc};
 pub use update::{LedgerChannelUpdate, LedgerChannelUpdateAccepted};
 pub use watch_request::{SignedWithdrawalAuth, WatchInfo};
@@ -54,6 +54,8 @@ pub enum WatcherReplyMessage {
 #[derive(Debug)]
 pub enum FunderRequestMessage {
     FundReq(LedgerChannelFundingRequest),
+    RegisterReq(RegisterReq),
+    WithdrawReq(WithdrawReq),
 }
 
 /// Messages sent from the Funder service.
