@@ -33,7 +33,7 @@ pub type NonceShare = Bytes32;
 /// Uniquely identifies an Asset by blockchain + AssetHolder.
 #[derive(Serialize, Debug, Copy, Clone, Default, PartialEq, Eq)]
 pub struct Asset {
-    pub chain_id: U256,
+    // pub chain_id: U256, // In v0.9.0, asset only has Address
     pub holder: Address,
 }
 
