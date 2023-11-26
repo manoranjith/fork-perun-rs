@@ -25,6 +25,15 @@ pub struct Transaction {
     pub sigs: [Signature; PARTICIPANTS],
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct AdjudicatorReq {
+	pub params:    Params,
+	pub acc:       Address,
+	pub tx:        Transaction,
+	pub idx:       PartIdx,
+	pub secondary: bool,
+}
+
 impl TryFrom<perunwire::FundReq> for LedgerChannelFundingRequest {
     type Error = ConversionError;
 
@@ -87,6 +96,49 @@ impl From<Transaction> for perunwire::Transaction {
         Self {
             state: Some(value.state.into()),
             sigs: value.sigs.map(|sig| sig.0.to_vec()).to_vec(),
+        }
+    }
+}
+
+
+impl TryFrom<perunwire::AdjudicatorReq> for AdjudicatorReq {
+    type Error = ConversionError;
+	// pub params:    Params,
+	// pub acc:       Address,
+	// pub tx:        Transaction,
+	// pub idx:       PartIdx,
+	// pub secondary: bool,
+
+    fn try_from(value: perunwire::AdjudicatorReq) -> Result<Self, Self::Error> {
+        Ok(Self {
+            params: value
+                .params
+                .ok_or(ConversionError::ExptectedSome)?
+                .try_into()?,
+            acc: Address(
+                value
+                    .acc
+                    .try_into()
+                    .or(Err(ConversionError::ByteLengthMissmatch))?,
+            ),
+            tx: value
+                .tx
+                .ok_or(ConversionError::ExptectedSome)?
+                .try_into()?,
+            idx: value.idx as usize,
+            secondary: value.secondary,
+        })
+    }
+}
+
+impl From<AdjudicatorReq> for perunwire::AdjudicatorReq {
+    fn from(value: AdjudicatorReq) -> Self {
+        Self {
+            params: Some(value.params.into()),
+            acc: value.acc.0.to_vec(),
+            tx: Some(value.tx.into()),
+            idx: value.idx as u32,
+            secondary: value.secondary,
         }
     }
 }
