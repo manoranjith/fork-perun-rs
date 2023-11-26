@@ -9,11 +9,15 @@ message Message {
     oneof msg {
         FundReq fund_req = 1;
         FundResp fund_resp = 2;
-        WatchRequestMsg watch_request = 3;
-        WatchResponseMsg watch_response = 4;
-        ForceCloseRequestMsg force_close_request = 5;
-        ForceCloseResponseMsg force_close_response = 6;
-        DisputeNotification dispute_notification = 7;
+        RegisterReq register_req = 3;
+        RegisterResp register_resp = 4;
+        WithdrawReq withdraw_req = 5;
+        WithdrawResp withdraw_resp = 6;
+        WatchRequestMsg watch_request = 7;
+        WatchResponseMsg watch_response = 8;
+        ForceCloseRequestMsg force_close_request = 9;
+        ForceCloseResponseMsg force_close_response = 10;
+        DisputeNotification dispute_notification = 11;
     }
 }
 
@@ -28,6 +32,40 @@ message FundReq {
 message FundResp {
     MsgError error = 1;
 }
+
+message AdjudicatorReq {
+    perunwire.Params params = 1;
+    bytes acc = 2;
+    perunwire.Transaction tx = 3;
+    uint32 idx = 4;
+    bool secondary = 5;
+}
+
+/* message StateMap { */
+/*     bytes id = 1; */
+/*     perunwire.State state = 2; */
+/* } */
+
+message RegisterReq {
+    string sessionID = 1;
+    AdjudicatorReq adjReq = 2;
+    /* repeated perunwire.SignedState signedStates = 3; */
+}
+
+message RegisterResp {
+    MsgError error = 1;
+}
+
+message WithdrawReq {
+    string sessionID = 1;
+    AdjudicatorReq adjReq = 2;
+    /* repeated StateMap stateMap = 3; */
+}
+
+message WithdrawResp {
+    MsgError error = 1;
+}
+
 
 message WatchRequestMsg {
     uint32 participant = 1;
