@@ -112,14 +112,31 @@ mod net {
     pub fn read_config() -> Config {
         // Some information about the (temporary) blockchain we need, could be hard
         // coded into the application or received by some other means.
-        let mut config_stream = TcpStream::connect("127.0.0.1:1339").unwrap();
-        let mut buf = [0u8; 20];
+        // let mut config_stream = TcpStream::connect("127.0.0.1:1339").unwrap();
+        // let mut buf = [0u8; 20];
 
-        config_stream.read_exact(&mut buf).unwrap();
-        let eth_holder = Address(buf);
+        // config_stream.read_exact(&mut buf).unwrap();
+        // let eth_holder = Address(buf);
 
-        config_stream.read_exact(&mut buf).unwrap();
-        let withdraw_receiver = Address(buf);
+        // config_stream.read_exact(&mut buf).unwrap();
+        // let withdraw_receiver = Address(buf);
+        
+        let asseteth_str = "5992089d61cE79B6CF90506F70DD42B8E42FB21d";
+        let withdraw_receiver_str = "c4bA4815c82727554e4c12A07a139b74c6742322";
+
+        let buf_asseteth: [u8; 20] = hex::decode(asseteth_str)
+            .expect("Decoding failed")
+            .as_slice()
+            .try_into()
+            .expect("Incorrect length");
+        let eth_holder = Address(buf_asseteth);
+
+        let buf_withdraw_receiver: [u8; 20] = hex::decode(withdraw_receiver_str)
+            .expect("Decoding failed")
+            .as_slice()
+            .try_into()
+            .expect("Incorrect length");
+        let withdraw_receiver = Address(buf_withdraw_receiver);
 
         Config {
             eth_holder,
