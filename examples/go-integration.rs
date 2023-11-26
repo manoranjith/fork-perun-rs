@@ -66,6 +66,7 @@ fn entry() -> ! {
     loop {}
 }
 
+
 const PARTICIPANTS: [&'static str; 2] = ["Bob", "Alice"];
 const NORMAL_CLOSE: bool = false;
 const SEND_DISPUTE: bool = true;
@@ -428,7 +429,20 @@ fn get_rng() -> impl Rng + CryptoRng {
 }
 
 fn get_peers() -> Vec<Vec<u8>> {
-    PARTICIPANTS.map(|p| p.as_bytes().to_vec()).into()
+    const PEER0: [u8; 20] = [
+        0x7b, 0x7E, 0x21, 0x26, 0x52, 0xb9, 0xC3, 0x75,
+        0x5C, 0x4E, 0x1f, 0x17, 0x18, 0xa1, 0x42, 0xdD,
+        0xE3, 0x81, 0x75, 0x23,
+    ];
+
+    const PEER1: [u8; 20] = [
+        0xa6, 0x17, 0xfa, 0x2c, 0xc5, 0xeC, 0x8d, 0x72,
+        0xd4, 0xA6, 0x0b, 0x9F, 0x42, 0x46, 0x77, 0xe7,
+        0x4E, 0x6b, 0xef, 0x68,
+    ];
+
+    vec![PEER0.to_vec(), PEER1.to_vec()]
+    // PARTICIPANTS.map(|p| p.as_bytes().to_vec()).into()
 }
 
 fn main() {
@@ -442,12 +456,29 @@ fn main() {
     let bus = Bus::new();
     let peers = get_peers();
 
-    // Signer, Addresses and Client
+    println!("peers  {:?} {:?}", peers[0], peers[1]); // Signer, Addresses and Client
     let signer = Signer::new(&mut rng);
     let addr = signer.address();
     let client = PerunClient::new(ProtoBufEncodingLayer { bus: &bus }, signer);
+
+
+    println!("going_to_send_handshake");
+    println!("handshake {:?}, {:?}", &peers[0], &peers[1]);
+
+    // let peer0_str = "7b7E212652b9C3755C4E1f1718a142dDE3817523"; // Bob
+    // let peer1_str = "a617fa2cc5eC8d72d4A60b9F424677e74E6bef68"; // Alice
+
+    // let peer0 = hex::decode(peer0_str)
+    //     .expect("Decoding failed");
+    // let peer1 = hex::decode(peer1_str)
+    //     .expect("Decoding failed");
+
+    // peers is a Vec[Vec[u8]]
+
     client.send_handshake_msg(&peers[0], &peers[1]);
     bus.recv_envelope();
+
+    println!("handshake done");
 
     // Create channel proposal (user configuration)
     print_user_interaction!("Proposing channel");
