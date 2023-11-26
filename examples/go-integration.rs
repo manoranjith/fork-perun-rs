@@ -540,7 +540,7 @@ fn main() {
     // Receive acknowledgements (currently not checked but we have to read them
     // anyways).
     bus.recv_message();
-    bus.recv_message();
+    // bus.recv_message(); // response from the watcher
 
     let mut channel = channel.mark_funded();
 
