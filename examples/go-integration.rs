@@ -68,8 +68,8 @@ fn entry() -> ! {
 
 
 const PARTICIPANTS: [&'static str; 2] = ["Bob", "Alice"];
-const NORMAL_CLOSE: bool = false;
-const SEND_DISPUTE: bool = true;
+const NORMAL_CLOSE: bool = true;
+const SEND_DISPUTE: bool = false;
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Config {
