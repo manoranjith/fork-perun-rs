@@ -66,6 +66,30 @@ message WithdrawResp {
     MsgError error = 1;
 }
 
+message StartWatchingLedgerChannelReq {
+    string sessionID = 1;
+    perunwire.Params params = 2;
+    perunwire.State state = 3;
+    repeated bytes sigs = 4;
+}
+
+message StartWatchingLedgerChannelResp {
+    oneof response{
+        RegisteredEvent registeredEvent = 1;
+        ProgressedEvent progressedEvent = 2;
+        ConcludedEvent concludedEvent = 3;
+        MsgError error = 4;
+    }
+}
+
+message StopWatchingReq {
+    string sessionID = 1;
+    bytes chID = 2;
+}
+
+message StopWatchingResp {
+    MsgError error = 1;
+}
 
 message WatchRequestMsg {
     uint32 participant = 1;
@@ -94,6 +118,7 @@ message WatchResponseMsg {
     bool success = 3;
 }
 
+
 message ForceCloseRequestMsg {
     bytes channel_id = 1;
     // Implicitly optional (messages have explicit presence). I'd love to mark
@@ -112,4 +137,41 @@ message ForceCloseResponseMsg {
 
 message DisputeNotification {
     bytes channel_id = 1;
+}
+
+
+// AdjudicatorEventBase represents channel.AdjudicatorEventBase.
+message AdjudicatorEventBase {
+    bytes chID = 1;
+    Timeout timeout = 2;
+    uint64 version = 3;
+
+    enum TimeoutType {
+        elapsed = 0;
+        time = 1;
+        ethBlock = 2;
+    }
+    message Timeout {
+	int64 sec = 1;
+        TimeoutType type = 3;
+    }
+}
+
+// RegisteredEvent represents channel.RegisteredEvent.
+message RegisteredEvent {
+    AdjudicatorEventBase adjudicatorEventBase = 1;
+    perunwire.State state = 2;
+    repeated bytes sigs = 3;
+}
+
+// ProgressedEvent represents channel.ProgressedEvent.
+message ProgressedEvent {
+    AdjudicatorEventBase adjudicatorEventBase = 1;
+    perunwire.State state = 2;
+    uint32 idx = 3;
+}
+
+// ConcludedEvent represents channel.ConcludedEvent.
+message ConcludedEvent {
+    AdjudicatorEventBase adjudicatorEventBase = 1;
 }
