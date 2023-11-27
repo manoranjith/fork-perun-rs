@@ -446,6 +446,8 @@ fn get_peers() -> Vec<Vec<u8>> {
 }
 
 fn main() {
+    use std::thread;
+
     let mut rng = get_rng();
 
     // Some information about the (temporary) blockchain we need, could be hard
@@ -487,7 +489,7 @@ fn main() {
                                                      1_000_000_000_000_000_000u64.into()])]);
     let prop = LedgerChannelProposal {
         proposal_id: rng.gen(),
-        challenge_duration: 25,
+        challenge_duration: 5,
         nonce_share: rng.gen(),
         init_bals: Allocation::new(
             [Asset {
@@ -553,16 +555,26 @@ fn main() {
 
     if NORMAL_CLOSE {
         print_user_interaction!("Bob: Propose Normal close");
-        let mut new_state = channel.state().make_next_state();
+        // let mut new_state = channel.state().make_next_state();
         // Propose a normal closure
-        new_state.is_final = true;
-        let update = channel.update(new_state).unwrap();
+        // new_state.is_final = true;
+        // let update = channel.update(new_state).unwrap();
+        let update =channel.close_normal().unwrap();
         handle_update_response(&bus, &mut channel, update);
+
+        channel = channel.force_close().unwrap();
+        bus.recv_message();
+        thread::sleep_ms(1000);
+        channel = channel.withdraw().unwrap();
+        bus.recv_message();
     }
 
     if SEND_DISPUTE {
         print_user_interaction!("Bob: Send StartDispute Message (force-close)");
-        channel.force_close().unwrap();
+        channel = channel.force_close().unwrap();
+        bus.recv_message();
+        thread::sleep_ms(6000);
+        channel.withdraw().unwrap();
         bus.recv_message();
     }
 
