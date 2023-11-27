@@ -157,12 +157,6 @@ impl From<Transaction> for perunwire::Transaction {
 
 impl TryFrom<perunwire::AdjudicatorReq> for AdjudicatorReq {
     type Error = ConversionError;
-	// pub params:    Params,
-	// pub acc:       Address,
-	// pub tx:        Transaction,
-	// pub idx:       PartIdx,
-	// pub secondary: bool,
-
     fn try_from(value: perunwire::AdjudicatorReq) -> Result<Self, Self::Error> {
         Ok(Self {
             params: value

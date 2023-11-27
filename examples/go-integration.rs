@@ -198,7 +198,7 @@ mod net {
     impl BytesBus for &Bus {
         fn send_to_watcher(&self, msg: &[u8]) {
             print!("{}->Watcher: {:?}\n", PARTICIPANTS[self.participant], msg);
-            // self.remote_stream.borrow_mut().write(msg).unwrap();
+            self.remote_stream.borrow_mut().write(msg).unwrap();
         }
 
         fn send_to_funder(&self, msg: &[u8]) {
@@ -564,7 +564,7 @@ fn main() {
 
         channel = channel.force_close().unwrap();
         bus.recv_message();
-        thread::sleep_ms(1000);
+        thread::sleep_ms(10000);
         channel = channel.withdraw().unwrap();
         bus.recv_message();
     }

@@ -242,7 +242,11 @@ impl<'cl, B: MessageBus> ActiveChannel<'cl, B> {
     pub fn send_current_state_to_watcher(&self) -> Result<(), SignError> {
         self.client
             .bus
-            .send_to_watcher(WatcherRequestMessage::WatchRequest(self.make_watch_info()?));
+            .send_to_watcher(WatcherRequestMessage::WatchRequest(StartWatchingLedgerChannelReq {
+                params: self.params,
+                state: self.state(),
+                sigs: self.signatures,
+            }));
         Ok(())
     }
 
