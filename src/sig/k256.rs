@@ -62,7 +62,7 @@ impl Signer {
 
             let addr = key.verifying_key().into();
 
-            println!("address of signer {:?}", addr);
+            // println!("address of signer {:?}", addr);
             Self { key, addr }
         }
 

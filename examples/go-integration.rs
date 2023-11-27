@@ -564,18 +564,19 @@ fn main() {
 
         channel = channel.force_close().unwrap();
         bus.recv_message();
-        thread::sleep_ms(10000);
-        channel = channel.withdraw().unwrap();
-        bus.recv_message();
+        // thread::sleep_ms(10000);
+        // channel = channel.withdraw().unwrap();
+        // bus.recv_message();
     }
 
     if SEND_DISPUTE {
         print_user_interaction!("Bob: Send StartDispute Message (force-close)");
-        channel = channel.force_close().unwrap();
+        // channel = channel.force_close().unwrap();
+        channel.force_close().unwrap();
         bus.recv_message();
-        thread::sleep_ms(6000);
-        channel.withdraw().unwrap();
-        bus.recv_message();
+        // thread::sleep_ms(6000);
+        // channel.withdraw().unwrap();
+        // bus.recv_message();
     }
 
     print_bold!("Bob done");
