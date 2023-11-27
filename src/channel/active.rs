@@ -11,7 +11,7 @@ use crate::{
     messages::{
         LedgerChannelUpdate,
         ParticipantMessage,
-        WatchInfo,
+        StartWatchingLedgerChannelReq,
         WatcherRequestMessage,
         FunderRequestMessage,
         RegisterReq,
@@ -231,22 +231,11 @@ impl<'cl, B: MessageBus> ActiveChannel<'cl, B> {
         }
     }
 
-    fn make_watch_info(&self) -> Result<WatchInfo, SignError> {
-        let withdrawal_auths = withdrawal_auth::make_signed_withdrawal_auths(
-            &self.client.signer,
-            self.channel_id(),
-            self.params,
-            self.state,
-            self.withdraw_receiver,
-            self.part_idx,
-        )?;
-
-        Ok(WatchInfo {
-            part_idx: self.part_idx,
+    fn make_watch_info(&self) -> Result<StartWatchingLedgerChannelReq, SignError> {
+        Ok(StartWatchingLedgerChannelReq {
             params: self.params,
             state: self.state,
-            signatures: self.signatures,
-            withdrawal_auths,
+            sigs: self.signatures,
         })
     }
 

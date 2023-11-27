@@ -13,11 +13,15 @@ message Message {
         RegisterResp register_resp = 4;
         WithdrawReq withdraw_req = 5;
         WithdrawResp withdraw_resp = 6;
-        WatchRequestMsg watch_request = 7;
-        WatchResponseMsg watch_response = 8;
-        ForceCloseRequestMsg force_close_request = 9;
-        ForceCloseResponseMsg force_close_response = 10;
-        DisputeNotification dispute_notification = 11;
+	StartWatchingLedgerChannelReq start_watching_ledger_channel_req = 7;
+	StartWatchingLedgerChannelResp start_watching_ledger_channel_resp = 8;
+	StopWatchingReq stop_watching_req = 9;
+	StopWatchingResp stop_watching_resp = 10;
+        WatchRequestMsg watch_request = 11;
+        WatchResponseMsg watch_response = 12;
+        ForceCloseRequestMsg force_close_request = 13;
+        ForceCloseResponseMsg force_close_response = 14;
+        DisputeNotification dispute_notification = 15;
     }
 }
 
