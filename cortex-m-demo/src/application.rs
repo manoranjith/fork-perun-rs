@@ -666,12 +666,22 @@ where
             None => return Err(Error::EnvelopeHasNoMsg),
         };
         let msg = match msg {
-            perunwire::message::Msg::FundingRequest(_) => unimplemented!(),
-            perunwire::message::Msg::FundingResponse(m) => {
+            perunwire::message::Msg::FundReq(_) => unimplemented!(),
+            perunwire::message::Msg::FundResp(m) => {
                 ServiceReplyMessage::Funder(FunderReplyMessage::Funded {
-                    id: Hash(m.channel_id.try_into().unwrap()),
+                    // id: Hash(m.channel_id.try_into().unwrap()),
+                    id: Hash([0u8; 32]),
                 })
             }
+            perunwire::message::Msg::RegisterReq(_) => unimplemented!(),
+            perunwire::message::Msg::RegisterResp(_) => unimplemented!(),
+            perunwire::message::Msg::WithdrawReq(_) => unimplemented!(),
+            perunwire::message::Msg::WithdrawResp(_) => unimplemented!(),
+            perunwire::message::Msg::StartWatchingLedgerChannelReq(_) => unimplemented!(),
+            perunwire::message::Msg::StartWatchingLedgerChannelResp(_) => unimplemented!(),
+            perunwire::message::Msg::StopWatchingReq(_) => unimplemented!(),
+            perunwire::message::Msg::StopWatchingResp(_) => unimplemented!(),
+
             perunwire::message::Msg::WatchRequest(_) => unimplemented!(),
             perunwire::message::Msg::WatchResponse(m) => {
                 ServiceReplyMessage::Watcher(WatcherReplyMessage::Ack {
