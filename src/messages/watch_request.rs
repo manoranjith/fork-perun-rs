@@ -4,6 +4,15 @@ use crate::{
     channel::{fixed_size_payment, PartIdx},
     perunwire, Address,
 };
+//
+// When using no_std, enable the alloc crate
+#[cfg(not(feature = "std"))]
+extern crate alloc;
+#[cfg(not(feature = "std"))]
+use alloc::string::String; // Use String from alloc crate
+
+#[cfg(feature = "std")]
+use std::string::String; // Use String from std library
 
 const ASSETS: usize = 1;
 const PARTICIPANTS: usize = 2;

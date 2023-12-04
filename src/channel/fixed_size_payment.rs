@@ -16,6 +16,15 @@ use crate::{
 use alloc::vec;
 use serde::Serialize;
 
+// When using no_std, enable the alloc crate
+#[cfg(not(feature = "std"))]
+extern crate alloc;
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec; // Use String from alloc crate
+
+#[cfg(feature = "std")]
+use std::vec::Vec; // Use String from std library
+
 /// Parameters for this channel, exchanged during channel proposal and sent
 /// on-chain during a dispute.
 #[derive(Serialize, Debug, Copy, Clone)]

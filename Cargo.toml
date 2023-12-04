@@ -18,6 +18,7 @@ secp256k1 = { version = "0.24.1", default-features = false, features = ["rand", 
 k256 = { version = "0.11.6", default-features = false, features = ["ecdsa", "keccak256", "arithmetic"], optional = true }
 rand = { version = "0.8.5", default-features = false, features = ["min_const_gen"] }
 prost = { version = "0.11.5", default-features = false, features = ["prost-derive"] }
+embedded-alloc = { version = "0.5.0", optional = true }
 
 [target.x86_64-unknown-linux-gnu.dev-dependencies]
 tokio = { version = "1.23.0", features = ["full"] }
@@ -29,7 +30,6 @@ cortex-m-rt = "0.7.2"
 cortex-m-semihosting = "0.5.0"
 # panic-halt = "0.2.0"
 panic-semihosting = "0.6.0"
-embedded-alloc = "0.5.0"
 
 [build-dependencies]
 prost-build = { version = "0.11.5" }
@@ -38,7 +38,7 @@ prost-build = { version = "0.11.5" }
 default = ["std", "k256"]
 std = ["serde/std", "rand/std", "rand/std_rng"]
 secp256k1 = ["dep:secp256k1", "std"]
-k256 = ["dep:k256"]
+k256 = ["dep:k256", "dep:embedded-alloc"]
 nostd-example = ["k256", "rand/std_rng"]
 no-go-comm = []
 
