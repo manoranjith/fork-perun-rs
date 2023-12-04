@@ -261,7 +261,7 @@ impl<'cl, B: MessageBus> ActiveChannel<'cl, B> {
     // At the moment this just drops the channel after sending the message. In
     // the future it might make sense to have a struct representing a closing
     // channel, for example to allow resending the last message.
-    pub fn force_close(self) -> Result<Self, SignError> {
+    pub fn force_close(self) -> Result<Self, (Self, SignError)> {
         // let watch_info = match self.make_watch_info() {
         //     Ok(v) => v,
         //     Err(e) => return Err((self, e)),

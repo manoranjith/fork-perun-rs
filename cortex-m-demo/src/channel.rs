@@ -201,8 +201,10 @@ impl<'cl, B: MessageBus> Channel<'cl, B> {
     pub fn force_close(&mut self) -> Result<(), Error> {
         self.progress(|inner| match inner {
             ChannelInner::Active(ch, update) => match ch.force_close() {
-                Ok(_) => Ok(ChannelInner::ForceClosing),
-                Err((ch, e)) => Err((ChannelInner::Active(ch, update), e.into())),
+                // Ok(_) => Ok(ChannelInner::ForceClosing),
+                // Err((ch, e)) => Err((ChannelInner::Active(ch, update), e.into())),
+                Ok(new_ch) => Ok(ChannelInner::ForceClosing),
+                Err((new_ch, sign_error)) => Err((ChannelInner::Active(new_ch, update), sign_error.into()))
             },
             ChannelInner::TemporaryInvalidState => unreachable!(),
             inner => return Err((inner, Error::InvalidState)),
