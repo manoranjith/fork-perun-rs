@@ -59,7 +59,7 @@ fn entry() -> ! {
     loop {}
 }
 
-const DEVICE_IP_ADDRESS: Ipv4Address = Ipv4Address::new(192, 168, 1, 126);
+const DEVICE_IP_ADDRESS: Ipv4Address = Ipv4Address::new(192, 168, 1, 125);
 const SERVER_IP_ADDRESS: Ipv4Address = Ipv4Address::new(192, 168, 1, 127);
 const SERVER_CONFIG_PORT: u16 = 1339;
 const SERVER_PARTICIPANT_PORT: u16 = 38843;  // Alice p2p port
