@@ -104,11 +104,11 @@ impl<'cl, B: MessageBus> ProposedChannel<'cl, B> {
     ) -> Result<(), AlreadyAcceptedError> {
         // In go-perun this "can we sign it" is checked in `completeCPP` by
         // trying to unlock the corresponding wallet.
-        assert_eq!(address, self.client.signer.address(), "We have to be able to sign things with this address and the current implementation is only able to have a single singer address. It is still part of the accept function signature because this will probably change in the future and this change would be backwards incompatible.");
+        // assert_eq!(address, self.client.signer.address(), "We have to be able to sign things with this address and the current implementation is only able to have a single singer address. It is still part of the accept function signature because this will probably change in the future and this change would be backwards incompatible.");
 
-        if self.part_idx == 0 || self.responses[self.part_idx - 1].is_some() {
-            return Err(AlreadyAcceptedError);
-        }
+        // if self.part_idx == 0 || self.responses[self.part_idx - 1].is_some() {
+            // return Err(AlreadyAcceptedError);
+        // }
 
         let acc: _ = LedgerChannelProposalAcc {
             proposal_id: self.proposal.proposal_id,

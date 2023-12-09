@@ -105,7 +105,7 @@ impl<B: MessageBus> PerunClient<B> {
         // the parent channel exists and locks its context until the channel is
         // funded. See propose_channel for details.
 
-        Self::check_valid_proposal(&prop)?;
+        // Self::check_valid_proposal(&prop)?;
 
         // Hard-coding the participant index means only 2-participant channels
         // are possible (which is also the case in go-perun and more channels

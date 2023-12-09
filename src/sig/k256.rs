@@ -105,3 +105,21 @@ impl Signer {
         Ok(verifying_key.into())
     }
 }
+
+// The following code will only be compiled when running tests
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_signer_address() {
+        let mut rng = rand::thread_rng();
+        let signer = Signer::new(&mut rng);
+        let address = signer.address();
+
+        println!("{:?}", address);
+        // Perform your assertions here
+        // For example, check if the address is what you expect
+        // assert_eq!(address, expected_address);
+    }
+}
