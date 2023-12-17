@@ -53,7 +53,7 @@ pub struct Config {
     pub other_participant: (IpAddress, u16),
     pub service_server: (IpAddress, u16),
     pub listen_port: u16,
-    pub participants: [&'static str; 2],
+    pub participants: [&'static [u8; 20]; 2],
 }
 
 /// State machine for the demo logic: Fetch information about the blockchain
@@ -312,9 +312,14 @@ where
             None => return Err(Error::InvalidState),
         }
 
-        let my_wire_address = self.config.participants[0].into();
+        const PEER0: [u8; 20] = [
+            0x7b, 0x7E, 0x21, 0x26, 0x52, 0xb9, 0xC3, 0x75,
+            0x5C, 0x4E, 0x1f, 0x17, 0x18, 0xa1, 0x42, 0xdD,
+            0xE3, 0x81, 0x75, 0x23,
+        ];
+        let my_wire_address = PEER0.to_vec();
 
-        if env.recipient[..] != self.config.participants[0].as_bytes()[..] {
+        if env.recipient[..] != my_wire_address {
             return Err(Error::UnexpectedMsg);
         }
 
@@ -428,7 +433,7 @@ where
             let peers: Vec<Vec<u8>> = self
                 .config
                 .participants
-                .map(|p| p.as_bytes().to_vec())
+                .map(|p| p.to_vec())
                 .into();
             self.client.send_handshake_msg(&peers[0], &peers[1]);
 
@@ -588,7 +593,7 @@ where
         let peers = self
             .config
             .participants
-            .map(|p| p.as_bytes().to_vec())
+            .map(|p| p.to_vec())
             .into();
         let prop = LedgerChannelProposal {
             proposal_id: self.rng.gen(),
