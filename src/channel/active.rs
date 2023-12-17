@@ -1,7 +1,7 @@
 use super::{
     channel_update::ChannelUpdate,
     fixed_size_payment::{self},
-    withdrawal_auth, PartIdx, Peers, SignError,
+    PartIdx, Peers, SignError,
 };
 use crate::{
     abiencode::{
