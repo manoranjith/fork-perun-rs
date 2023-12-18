@@ -6,7 +6,7 @@ mod watch_request;
 pub use funding_request::{LedgerChannelFundingRequest, RegisterReq, WithdrawReq, AdjudicatorReq, Transaction};
 pub use proposal::{LedgerChannelProposal, LedgerChannelProposalAcc};
 pub use update::{LedgerChannelUpdate, LedgerChannelUpdateAccepted};
-pub use watch_request::{SignedWithdrawalAuth, WatchInfo};
+pub use watch_request::{SignedWithdrawalAuth, WatchInfo, StartWatchingLedgerChannelReq};
 
 use crate::abiencode::types::Hash;
 use alloc::string::String;
@@ -25,12 +25,7 @@ pub enum ConversionError {
 pub enum WatcherRequestMessage {
     /// Ask the Watcher to start watching the blockchain for disputes.
     /// Acknowledged with [WatcherReplyMessage::Ack] containing `version == 0`.
-    WatchRequest(WatchInfo),
-    /// Ask the Watcher to initialize a dispute on-chain, with the given state.
-    /// It currently does not contain the parameters for reducing the amount of
-    /// communication needed. Adding it might be useful to make the watcher less
-    /// stateful.
-    StartDispute(WatchInfo),
+    WatchRequest(StartWatchingLedgerChannelReq),
 }
 
 /// Messages sent from the Watcher service.
