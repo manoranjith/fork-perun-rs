@@ -454,7 +454,7 @@ fn main() {
                                                      1_000_000_000_000_000_000u64.into()])]);
     let prop = LedgerChannelProposal {
         proposal_id: rng.gen(),
-        challenge_duration: 25,
+        challenge_duration: 5,
         nonce_share: rng.gen(),
         init_bals: Allocation::new(
             [Asset {
