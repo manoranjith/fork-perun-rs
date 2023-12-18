@@ -217,7 +217,7 @@ impl<'cl, B: MessageBus> AgreedUponChannel<'cl, B> {
 
         self.client
             .bus
-            .send_to_funder(FunderRequestMessage::FundingRequest(
+            .send_to_funder(FunderRequestMessage::FundReq(
                 LedgerChannelFundingRequest {
                     part_idx: self.part_idx,
                     funding_agreement: self.funding_agreement,
